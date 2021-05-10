@@ -37,22 +37,46 @@ package junit;
 
 public class PayStationImpl implements PayStation {
     private int insertedSoFar;
+    private int total;
     public void addPayment( int coinValue )
             throws IllegalCoinException {
         switch ( coinValue ) {
             case 5: break;
+            case 10:break;
             case 25: break;
             default:
                 throw new IllegalCoinException("Invalid coin: "+coinValue);
         }
-        insertedSoFar = coinValue;
+        insertedSoFar += coinValue;
     }
     public int readDisplay() {
         return insertedSoFar / 5 * 2;
     }
     public Receipt buy() {
-        return null;
+       Receipt receipt = new ReceiptImpl(readDisplay());
+       total += readDisplay();
+       clearDisplay();
+       return receipt;
     }
+
+    public void clearDisplay(){
+        insertedSoFar = 0;
+    }
+
     public void cancel() {
+        clearDisplay();
+    }
+
+    public int getInsertedSoFar(){
+        return insertedSoFar;
+    }
+    public int getTotal() throws EmptyPayStation {
+
+        if(total == 0)throw new EmptyPayStation("Empty PayStation");
+
+        int aux = total;
+        total = 0;
+
+        return aux;
     }
 }

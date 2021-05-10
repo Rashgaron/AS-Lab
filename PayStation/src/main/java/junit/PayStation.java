@@ -65,4 +65,7 @@ public interface PayStation {
      * transaction.
      */
     public void cancel();
+
+    public int getInsertedSoFar();
+    public int getTotal() throws EmptyPayStation;
 }

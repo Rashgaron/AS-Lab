@@ -69,4 +69,112 @@ public class TestPayStation {
         ps.addPayment(17);
     }
 
+    @Test
+    public void PayStation_Enter10And25_ReturnValid() throws IllegalCoinException {
+        ps.addPayment(10);
+        ps.addPayment(25);
+
+        int actual = ps.readDisplay();
+        int expected = 14;
+
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void PayStation_Buy_ValidReceipt() throws IllegalCoinException {
+
+        ps.addPayment(5);
+        ps.addPayment(10);
+        ps.addPayment(10);
+
+        Receipt receipt = ps.buy();
+
+        int actual = receipt.value();
+        int expected = 10;
+
+        assertEquals(expected, actual);
+
+    }
+
+    @Test
+    public void ReceipStoreValue_Enter100_Return100(){
+        Receipt receipt = new ReceiptImpl(100);
+        int expected = 100;
+        int actual = receipt.value();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void PayStation_Buy100Cents() throws IllegalCoinException {
+
+
+        ps.addPayment(10);
+        ps.addPayment(10);
+        ps.addPayment(5);
+
+        ps.buy();
+
+        ps.addPayment(10);
+        ps.addPayment(10);
+        ps.addPayment(5);
+        
+        Receipt receipt = ps.buy();
+
+        int actual = receipt.value();
+        int expected = 10;
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void PayStation_ClearAfterBuyOperation_Return0() throws IllegalCoinException {
+
+        ps.addPayment(10);
+        ps.buy();
+        int actual = ps.getInsertedSoFar();
+
+        assertEquals(0, actual);
+    }
+
+    @Test
+    public void PayStation_CancelPayment_Return0() throws IllegalCoinException {
+        ps.addPayment(10);
+        ps.addPayment(10);
+        ps.addPayment(5);
+
+        ps.cancel();
+
+        int actual = ps.readDisplay();
+
+        assertEquals(0, actual);
+    }
+
+
+    @Test
+    public void PayStation_GetTotalMoney_ReturnTotal() throws IllegalCoinException, EmptyPayStation {
+        ps.addPayment(10);
+        ps.addPayment(10);
+        ps.addPayment(5);
+
+        ps.buy();
+
+        ps.addPayment(10);
+        ps.addPayment(10);
+        ps.addPayment(5);
+
+        ps.buy();
+
+        int actual = ps.getTotal();
+        int expected = 20;
+
+        assertEquals(expected, actual);
+
+    }
+
+    @Test(expected = EmptyPayStation.class)
+    public void PayStation_TotalMoney0_ThrowException() throws EmptyPayStation {
+         ps.getTotal();
+    }
+
 }
