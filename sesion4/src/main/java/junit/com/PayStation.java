@@ -36,6 +36,7 @@ package junit.com;
  */
 public interface PayStation {
 
+
     /**
      * Insert coin into the pay station and adjust state accordingly.
      * @param coinValue is an integer value representing the coin in

@@ -1,5 +1,7 @@
 package junit.com;
 
+import junit.com.IRateStrategy;
+
 /** Implementation of the pay station.
 
  Responsibilities:
@@ -38,6 +40,11 @@ package junit.com;
 public class PayStationImpl implements junit.com.PayStation {
     private int insertedSoFar;
     private int timeBought;
+    IRateStrategy RateStrategy;
+
+    public PayStationImpl(IRateStrategy RateStrategy){
+        this.RateStrategy = RateStrategy;
+    }
 
     public void addPayment( int coinValue )
             throws junit.com.IllegalCoinException {
@@ -49,11 +56,14 @@ public class PayStationImpl implements junit.com.PayStation {
                 throw new junit.com.IllegalCoinException("Invalid coin: "+coinValue);
         }
         insertedSoFar += coinValue;
-        timeBought = insertedSoFar / 5 * 2;
+        timeBought = RateStrategy.calculaTime(insertedSoFar);
     }
+
+
     public int readDisplay() {
         return timeBought;
     }
+
     public junit.com.Receipt buy() {
         junit.com.Receipt r = new junit.com.ReceiptImpl(timeBought);
         reset();
