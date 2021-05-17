@@ -5,40 +5,28 @@ import org.junit.Test;
 
 import static org.mockito.Mockito.*;
 
-public class TestIntegration {
 
+public class TestIntegration {
 
     @Test
     public void IntegrationPayStation_NovaYork_Return() throws IllegalCoinException {
 
-        IRateStrategy RateStrategy = new One2OneStrategy();
+        int time = 25;
+
+
+        IRateStrategy RateStrategy = mock(ProgressiveRate.class);
+        when(RateStrategy.calculaTime(anyInt())).thenAnswer(invocation -> invocation.getArguments()[0]);
         PayStationImpl ps = new PayStationImpl(RateStrategy);
 
         ps.addPayment(25);
 
         int actual = ps.readDisplay();
 
-        int expected = 25;
+        int expected = time;
 
         Assert.assertEquals(expected, actual);
 
     }
-
-    @Test
-    public void IntegrationPayStation_Boston_Return() throws IllegalCoinException {
-        IRateStrategy RateStrategy = new One2OneStrategy();
-        PayStationImpl ps = new PayStationImpl(RateStrategy);
-
-        ps.addPayment(25);
-
-        int actual = ps.readDisplay();
-
-        int expected = 25;
-
-        Assert.assertEquals(expected, actual);
-
-    }
-
 
 
 }
